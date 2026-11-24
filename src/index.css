@@ -1,111 +1,114 @@
-:root {
-  --text: #6b6375;
-  --text-h: #08060d;
-  --bg: #fff;
-  --border: #e5e4e7;
-  --code-bg: #f4f3ec;
-  --accent: #aa3bff;
-  --accent-bg: rgba(170, 59, 255, 0.1);
-  --accent-border: rgba(170, 59, 255, 0.5);
-  --social-bg: rgba(244, 243, 236, 0.5);
-  --shadow:
-    rgba(0, 0, 0, 0.1) 0 10px 15px -3px, rgba(0, 0, 0, 0.05) 0 4px 6px -2px;
+@import 'tailwindcss';
 
-  --sans: system-ui, 'Segoe UI', Roboto, sans-serif;
-  --heading: system-ui, 'Segoe UI', Roboto, sans-serif;
-  --mono: ui-monospace, Consolas, monospace;
+/* The `dark:` variant follows <html data-theme="dark"> (set by ThemeProvider). */
+@custom-variant dark (&:where([data-theme='dark'], [data-theme='dark'] *));
 
-  font: 18px/145% var(--sans);
-  letter-spacing: 0.18px;
-  color-scheme: light dark;
-  color: var(--text);
-  background: var(--bg);
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+/* ============ Design tokens (light) ============ */
+@theme {
+  --font-sans: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
 
-  @media (max-width: 1024px) {
-    font-size: 16px;
+  --color-bg: #f3f5f8;
+  --color-surface: #ffffff;
+  --color-surface-2: #f7f9fb;
+  --color-line: #e4e8ee;
+  --color-fg: #1a2330;
+  --color-muted: #6a7686;
+
+  --color-primary: #12a56b;
+  --color-primary-hover: #0e8c5a;
+  --color-primary-soft: #e2f6ed;
+  --color-on-primary: #ffffff;
+
+  --color-danger: #e5484d;
+  --color-warning: #f5a524;
+  --color-info: #3b82f6;
+
+  --shadow-card: 0 1px 2px rgb(16 24 40 / 0.06);
+  --shadow-pop: 0 10px 28px rgb(16 24 40 / 0.12);
+
+  --radius-card: 14px;
+  --radius-control: 10px;
+}
+
+/* ============ Design tokens (dark): same names, new values ============ */
+[data-theme='dark'] {
+  --color-bg: #0e1418;
+  --color-surface: #161e24;
+  --color-surface-2: #1b252c;
+  --color-line: #26323b;
+  --color-fg: #e8eef2;
+  --color-muted: #8c9aa7;
+
+  --color-primary: #2ec98a;
+  --color-primary-hover: #4bd9a0;
+  --color-primary-soft: rgb(46 201 138 / 0.14);
+  --color-on-primary: #062217;
+
+  --color-danger: #ff6b70;
+  --color-warning: #ffbf47;
+  --color-info: #6aa3ff;
+
+  --shadow-card: 0 1px 2px rgb(0 0 0 / 0.4);
+  --shadow-pop: 0 10px 28px rgb(0 0 0 / 0.5);
+}
+
+/* ============ Base ============ */
+@layer base {
+  html {
+    color-scheme: light;
+  }
+  html[data-theme='dark'] {
+    color-scheme: dark;
+  }
+
+  body {
+    @apply bg-bg font-sans text-[15px] leading-normal text-fg antialiased;
+  }
+  body.no-scroll {
+    overflow: hidden;
+  }
+  body:has(dialog[open]) {
+    overflow: hidden;
+  }
+  /* Tailwind v4 resets buttons to the default cursor. */
+  button:not(:disabled),
+  [role='button']:not(:disabled),
+  summary {
+    cursor: pointer;
+  }
+
+  :focus-visible {
+    @apply outline-2 outline-offset-2 outline-primary;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    ::before,
+    ::after {
+      transition-duration: 0.01ms !important;
+    }
   }
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --text: #9ca3af;
-    --text-h: #f3f4f6;
-    --bg: #16171d;
-    --border: #2e303a;
-    --code-bg: #1f2028;
-    --accent: #c084fc;
-    --accent-bg: rgba(192, 132, 252, 0.15);
-    --accent-border: rgba(192, 132, 252, 0.5);
-    --social-bg: rgba(47, 48, 58, 0.5);
-    --shadow:
-      rgba(0, 0, 0, 0.4) 0 10px 15px -3px, rgba(0, 0, 0, 0.25) 0 4px 6px -2px;
+/* ============ Shared building blocks ============
+   Only things used on almost every page live here. Anything else is written
+   as utility classes directly in the component. */
+@layer components {
+  .card {
+    @apply rounded-card border border-line bg-surface p-5 shadow-card;
   }
 
-  #social .button-icon {
-    filter: invert(1) brightness(2);
+  .btn {
+    @apply inline-flex h-10 items-center justify-center gap-2 rounded-control border border-line bg-surface px-4 font-semibold text-fg transition-colors hover:bg-surface-2 disabled:cursor-not-allowed disabled:opacity-50;
   }
-}
-
-#root {
-  width: 1126px;
-  max-width: 100%;
-  margin: 0 auto;
-  text-align: center;
-  border-inline: 1px solid var(--border);
-  min-height: 100svh;
-  display: flex;
-  flex-direction: column;
-  box-sizing: border-box;
-}
-
-body {
-  margin: 0;
-}
-
-h1,
-h2 {
-  font-family: var(--heading);
-  font-weight: 500;
-  color: var(--text-h);
-}
-
-h1 {
-  font-size: 56px;
-  letter-spacing: -1.68px;
-  margin: 32px 0;
-  @media (max-width: 1024px) {
-    font-size: 36px;
-    margin: 20px 0;
+  .btn-primary {
+    @apply border-primary bg-primary text-on-primary hover:border-primary-hover hover:bg-primary-hover;
   }
-}
-h2 {
-  font-size: 24px;
-  line-height: 118%;
-  letter-spacing: -0.24px;
-  margin: 0 0 8px;
-  @media (max-width: 1024px) {
-    font-size: 20px;
+  .btn-danger {
+    @apply border-danger bg-danger text-white hover:border-danger hover:bg-danger hover:brightness-90;
   }
-}
-p {
-  margin: 0;
-}
 
-code,
-.counter {
-  font-family: var(--mono);
-  display: inline-flex;
-  border-radius: 4px;
-  color: var(--text-h);
-}
-
-code {
-  font-size: 15px;
-  line-height: 135%;
-  padding: 4px 8px;
-  background: var(--code-bg);
+  .icon-btn {
+    @apply relative inline-grid size-10 place-items-center rounded-control text-muted transition-colors hover:bg-surface-2 hover:text-fg;
+  }
 }
