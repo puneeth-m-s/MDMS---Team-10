@@ -1,5 +1,6 @@
 import { Navigate, createBrowserRouter } from "react-router-dom";
 import type { RouteObject } from "react-router-dom";
+import type { ComponentType } from "react";
 import AppLayout from "../features/auth/layout/AppLayout";
 import {
   AccessDeniedPage,
@@ -25,6 +26,30 @@ const page = (path: string, title: string): RouteObject => ({
   lazy: async () => ({
     Component: (await import("../features/auth/components/PlaceholderPage"))
       .default,
+  }),
+});
+
+const zonePage = (
+  path: string,
+  title: string,
+  loader: () => Promise<{ default: ComponentType }>,
+): RouteObject => ({
+  path,
+  handle: { title },
+  lazy: async () => ({
+    Component: (await loader()).default,
+  }),
+});
+
+const enterprisePage = (
+  path: string,
+  title: string,
+  loader: () => Promise<{ default: ComponentType }>,
+): RouteObject => ({
+  path,
+  handle: { title },
+  lazy: async () => ({
+    Component: (await loader()).default,
   }),
 });
 
@@ -94,13 +119,13 @@ export const router = createBrowserRouter([
                 path: "zone",
                 children: [
                   redirectTo("dashboard"),
-                  page("dashboard", "Zone dashboard"),
-                  page("meters", "Meter management"),
-                  page("meters/:meterId", "Meter details"),
-                  page("users", "User management"),
-                  page("reports", "Reports & analytics"),
-                  page("alerts", "Alerts"),
-                  page("settings", "Zone settings"),
+                  zonePage("dashboard", "Zone dashboard", () => import("../features/zone/pages/Dashboard")),
+                  zonePage("meters", "Meter management", () => import("../features/zone/pages/MeterManagement")),
+                  zonePage("meters/:meterId", "Meter details", () => import("../features/zone/pages/MeterDetails")),
+                  zonePage("users", "User management", () => import("../features/zone/pages/UserManagement")),
+                  zonePage("reports", "Reports & analytics", () => import("../features/zone/pages/Reports")),
+                  zonePage("alerts", "Alerts", () => import("../features/zone/pages/Alerts")),
+                  zonePage("settings", "Zone settings", () => import("../features/zone/pages/Settings")),
                 ],
               },
 
@@ -108,15 +133,15 @@ export const router = createBrowserRouter([
                 path: "enterprise",
                 children: [
                   redirectTo("dashboard"),
-                  page("dashboard", "Enterprise dashboard"),
-                  page("zones", "Zone management"),
-                  page("zones/:zoneId", "Zone details"),
-                  page("meters", "Meter management"),
-                  page("users", "User & role management"),
-                  page("reports", "Reports & analytics"),
-                  page("alerts", "Alerts"),
-                  page("audit-logs", "Audit logs"),
-                  page("settings", "Settings & configuration"),
+                  enterprisePage("dashboard", "Enterprise dashboard", () => import("../features/enterprise/pages/Dashboard")),
+                  enterprisePage("zones", "Zone management", () => import("../features/enterprise/pages/ZoneManagement")),
+                  enterprisePage("zones/:zoneId", "Zone details", () => import("../features/enterprise/pages/ZoneDetails")),
+                  enterprisePage("meters", "Meter management", () => import("../features/enterprise/pages/MeterManagement")),
+                  enterprisePage("users", "User & role management", () => import("../features/enterprise/pages/UserManagement")),
+                  enterprisePage("reports", "Reports & analytics", () => import("../features/enterprise/pages/Reports")),
+                  enterprisePage("alerts", "Alerts", () => import("../features/enterprise/pages/Alerts")),
+                  enterprisePage("audit-logs", "Audit logs", () => import("../features/enterprise/pages/AuditLogs")),
+                  enterprisePage("settings", "Settings & configuration", () => import("../features/enterprise/pages/Settings")),
                 ],
               },
             ],
