@@ -1,12 +1,12 @@
-import { Navigate, createBrowserRouter } from 'react-router-dom'
-import type { RouteObject } from 'react-router-dom'
-import AppLayout from '../shared/layout/AppLayout'
+import { Navigate, createBrowserRouter } from "react-router-dom";
+import type { RouteObject } from "react-router-dom";
+import AppLayout from "../features/auth/layout/AppLayout";
 import {
   AccessDeniedPage,
   MaintenancePage,
   NotFoundPage,
   ServerErrorPage,
-} from '../shared/routes/UtilityPages'
+} from "../features/auth/routes/UtilityPages";
 
 /**
  * Builds a lazy-loaded route. For now every page is the temporary placeholder.
@@ -23,14 +23,15 @@ const page = (path: string, title: string): RouteObject => ({
   path,
   handle: { title },
   lazy: async () => ({
-    Component: (await import('../shared/components/PlaceholderPage')).default,
+    Component: (await import("../features/auth/components/PlaceholderPage"))
+      .default,
   }),
-})
+});
 
 const redirectTo = (to: string): RouteObject => ({
   index: true,
   element: <Navigate to={to} replace />,
-})
+});
 
 /**
  * Component test page at /dev/components.
@@ -39,14 +40,15 @@ const redirectTo = (to: string): RouteObject => ({
 const devRoutes: RouteObject[] = import.meta.env.DEV
   ? [
       {
-        path: 'dev/components',
-        handle: { title: 'Component demo' },
+        path: "dev/components",
+        handle: { title: "Component demo" },
         lazy: async () => ({
-          Component: (await import('../features/dev/pages/ComponentsDemo')).default,
+          Component: (await import("../features/auth/pages/ComponentsDemo"))
+            .default,
         }),
       },
     ]
-  : []
+  : [];
 
 export const router = createBrowserRouter([
   {
@@ -56,13 +58,13 @@ export const router = createBrowserRouter([
       { index: true, element: <Navigate to="/login" replace /> },
 
       /* ---------- Auth screens ---------- */
-      page('login', 'Login'),
-      page('forgot-password', 'Forgot password'),
-      page('reset-password/:token', 'Reset password'),
+      page("login", "Login"),
+      page("forgot-password", "Forgot password"),
+      page("reset-password/:token", "Reset password"),
 
       /* ---------- Utility pages ---------- */
-      { path: 'maintenance', element: <MaintenancePage /> },
-      { path: 'access-denied', element: <AccessDeniedPage /> },
+      { path: "maintenance", element: <MaintenancePage /> },
+      { path: "access-denied", element: <AccessDeniedPage /> },
 
       /* ---------- Main app: one shared layout for all roles ---------- */
       {
@@ -73,48 +75,48 @@ export const router = createBrowserRouter([
             // so the header and sidebar stay usable.
             errorElement: <ServerErrorPage />,
             children: [
-              page('profile', 'Profile & Settings'),
+              page("profile", "Profile & Settings"),
               ...devRoutes,
 
               {
-                path: 'user',
+                path: "user",
                 children: [
-                  redirectTo('dashboard'),
-                  page('dashboard', 'Dashboard'),
-                  page('bills', 'My bills'),
-                  page('bills/:billId', 'Bill details'),
-                  page('meter-data', 'Meter data'),
-                  page('alerts', 'Alerts & Notifications'),
+                  redirectTo("dashboard"),
+                  page("dashboard", "Dashboard"),
+                  page("bills", "My bills"),
+                  page("bills/:billId", "Bill details"),
+                  page("meter-data", "Meter data"),
+                  page("alerts", "Alerts & Notifications"),
                 ],
               },
 
               {
-                path: 'zone',
+                path: "zone",
                 children: [
-                  redirectTo('dashboard'),
-                  page('dashboard', 'Zone dashboard'),
-                  page('meters', 'Meter management'),
-                  page('meters/:meterId', 'Meter details'),
-                  page('users', 'User management'),
-                  page('reports', 'Reports & analytics'),
-                  page('alerts', 'Alerts'),
-                  page('settings', 'Zone settings'),
+                  redirectTo("dashboard"),
+                  page("dashboard", "Zone dashboard"),
+                  page("meters", "Meter management"),
+                  page("meters/:meterId", "Meter details"),
+                  page("users", "User management"),
+                  page("reports", "Reports & analytics"),
+                  page("alerts", "Alerts"),
+                  page("settings", "Zone settings"),
                 ],
               },
 
               {
-                path: 'enterprise',
+                path: "enterprise",
                 children: [
-                  redirectTo('dashboard'),
-                  page('dashboard', 'Enterprise dashboard'),
-                  page('zones', 'Zone management'),
-                  page('zones/:zoneId', 'Zone details'),
-                  page('meters', 'Meter management'),
-                  page('users', 'User & role management'),
-                  page('reports', 'Reports & analytics'),
-                  page('alerts', 'Alerts'),
-                  page('audit-logs', 'Audit logs'),
-                  page('settings', 'Settings & configuration'),
+                  redirectTo("dashboard"),
+                  page("dashboard", "Enterprise dashboard"),
+                  page("zones", "Zone management"),
+                  page("zones/:zoneId", "Zone details"),
+                  page("meters", "Meter management"),
+                  page("users", "User & role management"),
+                  page("reports", "Reports & analytics"),
+                  page("alerts", "Alerts"),
+                  page("audit-logs", "Audit logs"),
+                  page("settings", "Settings & configuration"),
                 ],
               },
             ],
@@ -123,7 +125,7 @@ export const router = createBrowserRouter([
       },
 
       /* ---------- Catch-all ---------- */
-      { path: '*', element: <NotFoundPage /> },
+      { path: "*", element: <NotFoundPage /> },
     ],
   },
-])
+]);
