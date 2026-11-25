@@ -1,75 +1,34 @@
-# React + TypeScript + Vite
+# MDMS · Phase 1
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+React, TypeScript, Vite and JSON Server foundation for the Meter Data Management System.
 
-Currently, two official plugins are available:
+## Start the project
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
-
-## React Compiler
-
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
-
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
-
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-
+```bash
+npm install
+npm run generate:data
 ```
 
-You can also install [eslint-plugin-react-x](https://npmx.dev/package/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://npmx.dev/package/eslint-plugin-react-dom) for React-specific lint rules:
+Open two terminals in the project folder:
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-
+```bash
+npm run server
 ```
+
+```bash
+npm run dev
+```
+
+Vite serves the app at `http://localhost:5173`. JSON Server serves the read-only demo data at `http://localhost:3000`.
+
+Open `/login` and choose one of the temporary End-user, Zone admin or Enterprise links to enter that workspace. The login, reset, management and settings forms validate their inputs, but Phase 1 does not save changes or perform real authentication, payments or email delivery.
+
+## Regenerate demo data
+
+`npm run generate:data` runs `scripts/generateData.mjs` to write the sample zones, users, meters, bills, readings, chart series, alerts, notifications, audit logs and settings to `db.json`.
+
+All app data requests use GET through the shared Axios instance in `src/services/http.ts`. Filtering, sorting and pagination for tables are sent to JSON Server.
+
+## Team workflow
+
+Use one shared repository. Work on a task branch, open a pull request for review, and merge after a teammate reviews it. Keep commits small and clear so each team member's work is visible.
