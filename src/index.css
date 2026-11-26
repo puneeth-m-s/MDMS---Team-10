@@ -1,4 +1,4 @@
-@import 'tailwindcss';
+ @import 'tailwindcss';
 
 /* The `dark:` variant follows <html data-theme="dark"> (set by ThemeProvider). */
 @custom-variant dark (&:where([data-theme='dark'], [data-theme='dark'] *));
@@ -111,4 +111,6 @@
   .icon-btn {
     @apply relative inline-grid size-10 place-items-center rounded-control text-muted transition-colors hover:bg-surface-2 hover:text-fg;
   }
-}
+} 
+
+ 

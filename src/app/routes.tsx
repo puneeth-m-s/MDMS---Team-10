@@ -58,9 +58,27 @@ export const router = createBrowserRouter([
       { index: true, element: <Navigate to="/login" replace /> },
 
       /* ---------- Auth screens ---------- */
-      page("login", "Login"),
-      page("forgot-password", "Forgot password"),
-      page("reset-password/:token", "Reset password"),
+          {
+        path: 'login',
+        handle: { title: 'Login' },
+        lazy: async () => ({
+          Component: (await import('../features/auth/pages/Login')).default,
+        }),
+      },
+      {
+        path: 'forgot-password',
+        handle: { title: 'Forgot password' },
+        lazy: async () => ({
+          Component: (await import('../features/auth/pages/ForgotPassword')).default,
+        }),
+      },
+      {
+        path: 'reset-password/:token',
+        handle: { title: 'Reset password' },
+        lazy: async () => ({
+          Component: (await import('../features/auth/pages/ResetPassword')).default,
+        }),
+      },
 
       /* ---------- Utility pages ---------- */
       { path: "maintenance", element: <MaintenancePage /> },
